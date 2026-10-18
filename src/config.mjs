@@ -10,8 +10,8 @@ export const SITE = {
   email: 'max@bluehousedigital.com',
   linkedin: 'https://www.linkedin.com/in/max-cowan/',
   founded: '2018',
-  // Staging stays out of search until launch: set SITE_INDEXABLE=true on the production build.
-  indexable: env.SITE_INDEXABLE === 'true',
+  // Indexable by default. functions/_middleware.js keeps preview hosts out of search; SITE_INDEXABLE=false forces a noindex build.
+  indexable: env.SITE_INDEXABLE !== 'false',
   // Public keys and IDs (safe to ship to the browser)
   turnstileSiteKey: env.TURNSTILE_SITE_KEY || '0x4AAAAAAFaixtRZ_SnM5mpV',
   ga4Id: env.GA4_ID || 'G-TPKMTV2ZB0',

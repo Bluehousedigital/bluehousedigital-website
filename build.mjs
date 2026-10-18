@@ -9,7 +9,7 @@ import { SITE } from './src/config.mjs';
 
 process.env.BUILD_ID = process.env.CF_PAGES_COMMIT_SHA?.slice(0, 8) || Date.now().toString(36);
 const OUT = 'dist';
-const LAUNCH_DATE = process.env.LAUNCH_DATE || '2026-11-02';
+const LAUNCH_DATE = process.env.LAUNCH_DATE || '2026-10-18';
 const fmt = (iso) => new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 const today = new Date().toISOString().slice(0, 10);
 
@@ -84,8 +84,7 @@ ${SITE.indexable ? '' : '  X-Robots-Tag: noindex, nofollow\n'}/fonts/*
 /llms.txt
   Content-Type: text/plain; charset=utf-8
 `);
-fs.writeFileSync(path.join(OUT, '_redirects'), `https://www.bluehousedigital.com/* https://bluehousedigital.com/:splat 301
-/home / 301
+fs.writeFileSync(path.join(OUT, '_redirects'), `/home / 301
 /contact-us /contact/ 301
 /services /brands/ 301
 /blog /insights/ 301
