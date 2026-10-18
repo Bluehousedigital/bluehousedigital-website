@@ -11,7 +11,7 @@ const json = (body, status = 200) => new Response(JSON.stringify(body), { status
 const clip = (v, n = 500) => (typeof v === 'string' ? v.trim().slice(0, n) : '');
 
 // The one HubSpot form both site forms submit into (env vars override).
-const HUBSPOT_FORM_DEFAULT = '';
+const HUBSPOT_FORM_DEFAULT = '01a3a78f-6657-4274-80cf-61b514fc0370';
 
 export async function onRequestPost({ request, env }) {
   let d;

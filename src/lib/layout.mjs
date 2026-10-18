@@ -6,7 +6,7 @@ export function layout({ path, title, description, body, current = '', schema = 
   const canonical = SITE.url + path;
   const robots = (!SITE.indexable || noindex) ? '<meta name="robots" content="noindex, nofollow">' : '<meta name="robots" content="index, follow, max-image-preview:large">';
   const ga = SITE.ga4Id ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${SITE.ga4Id}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${SITE.ga4Id}');</script>` : '';
-  const hs = SITE.hubspotPortalId ? `<script async defer id="hs-script-loader" src="https://js.hs-scripts.com/${SITE.hubspotPortalId}.js"></script>` : '';
+  const hs = SITE.hubspotPortalId ? `<script async defer id="hs-script-loader" src="https://js-na2.hs-scripts.com/${SITE.hubspotPortalId}.js"></script>` : '';
   const ts = hasForm ? '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>' : '';
   const ld = schema.length ? `<script type="application/ld+json">${JSON.stringify(schema.length === 1 ? schema[0] : { '@context': 'https://schema.org', '@graph': schema.map(s => { const { ['@context']: _, ...rest } = s; return rest; }) })}</script>` : '';
   return `<!doctype html>
