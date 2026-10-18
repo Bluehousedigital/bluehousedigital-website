@@ -90,7 +90,11 @@
         .then(function (res) {
           if (!res.ok) throw new Error(res.j.error || 'Something went wrong.');
           try { sessionStorage.setItem('bh_last_form', data.bh_form_location || ''); } catch (e) {}
-          location.href = '/contact/thanks/';
+          var go = function () { location.href = '/contact/thanks/'; };
+          if (typeof window.gtag === 'function') {
+            window.gtag('event', 'generate_lead', { form_location: data.bh_form_location || '', situation: data.situation || '', event_callback: go, event_timeout: 1200 });
+            setTimeout(go, 1500);
+          } else go();
         })
         .catch(function (err) {
           btn.disabled = false; btn.textContent = btn.getAttribute('data-label');
