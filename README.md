@@ -1,5 +1,7 @@
 # bluehousedigital.com
 
+Live since Oct 18, 2026. Full operations guide (accounts, IDs, how to change and publish): [docs/RUNBOOK.md](docs/RUNBOOK.md).
+
 The Blue House Digital website. A small, dependency-free static site generator turns the approved copy (`content/copy.md`) into pages, and Cloudflare Pages hosts it.
 
 ## How it works
@@ -25,7 +27,7 @@ Build locally with `node build.mjs`. Node 20 or newer, no install step.
 
 | Name | Where | Value |
 | --- | --- | --- |
-| `SITE_INDEXABLE` | Production only, at launch | `true` (until then, every page is noindex and robots.txt blocks crawling) |
+| `SITE_INDEXABLE` | Optional | Set `false` to force a noindex build. Default is indexable; `functions/_middleware.js` keeps preview hosts out of search. |
 | `TURNSTILE_SECRET` | Secret | Turnstile secret key |
 | `HUBSPOT_PORTAL_ID` | Plain | HubSpot account ID |
 | `HUBSPOT_FORM_A` | Plain | Form GUID for the short form |
