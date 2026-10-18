@@ -68,7 +68,7 @@ export async function onRequestPost({ request, env }) {
         console.error('HubSpot error', last);
       }
     }
-    return json({ error: `Your message didn’t go through (${last.slice(0, 160)}).` }, 502);
+    return json({ error: 'Your message didn’t go through.' }, 502);
   }
 
   if (env.LEAD_FALLBACK_URL) {

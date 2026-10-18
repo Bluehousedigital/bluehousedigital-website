@@ -34,8 +34,8 @@ Build locally with `node build.mjs`. Node 20 or newer, no install step.
 | `HUBSPOT_MEETINGS_URL` | Plain, optional | Meetings link for the thanks page scheduler |
 | `LAUNCH_DATE` | Plain, optional | Publish date shown on the launch post (YYYY-MM-DD) |
 
-Without the HubSpot variables the form still accepts submissions (useful on staging) and logs them in the Pages function logs.
+The HubSpot account (247722762, na2) and the "Website lead form" GUID are built in as defaults in `src/config.mjs` and `functions/api/lead.js`, so no HubSpot variables are required. Both site forms submit into that one form. Bot filtering is off on that HubSpot form because Turnstile and the honeypot handle spam; leave it off or server-side submissions land in spam.
 
 ## HubSpot form fields
 
-Both forms use standard contact properties (`firstname`, `lastname`, `email`, `company`, `website`, `jobtitle`, `message`) plus these custom contact properties: `bh_situation`, `bh_audience`, `bh_form_location`, `bh_service_interest`, `bh_referrer`, and the five `utm_*` fields. If a custom property is missing, the handler falls back to standard fields and folds the details into `message`, so no lead is lost.
+Only standard contact properties are sent: `firstname`, `lastname`, `email`, `company`, `website`, `jobtitle`, `message`. Situation, form location, service page, audience, referrer and UTM values are listed inside `message`, so no custom properties are needed. The forms carry `data-hs-do-not-collect` so HubSpot's collected-forms script doesn't double capture them.
