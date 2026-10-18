@@ -34,13 +34,18 @@ export async function onRequestPost({ request, env }) {
   }
 
   const [firstname, ...rest] = name.split(/\s+/);
+  // Standard HubSpot contact properties only, so no custom setup is needed.
+  // Everything else is laid out in the Message field, one item per line.
+  const details = [
+    ['Situation', situation], ['Form', clip(d.bh_form_location, 60)], ['Service page', clip(d.bh_service_interest, 60)],
+    ['Audience', clip(d.audience || d.bh_audience, 40)], ['Referrer', clip(d.referrer, 500)],
+    ['UTM', ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].map(k => clip(d[k])).filter(Boolean).join(' / ')],
+  ].filter(([, v]) => v).map(([k, v]) => `${k}: ${v}`).join('\n');
+  const note = clip(d.message, 4000);
   const fields = [
     ['firstname', firstname], ['lastname', rest.join(' ')], ['email', email], ['company', company],
-    ['bh_situation', situation], ['website', clip(d.website, 300)], ['jobtitle', clip(d.role, 120)],
-    ['message', clip(d.message, 4000)], ['bh_audience', clip(d.audience || d.bh_audience, 40)],
-    ['bh_form_location', clip(d.bh_form_location, 60)], ['bh_service_interest', clip(d.bh_service_interest, 60)],
-    ['utm_source', clip(d.utm_source)], ['utm_medium', clip(d.utm_medium)], ['utm_campaign', clip(d.utm_campaign)],
-    ['utm_term', clip(d.utm_term)], ['utm_content', clip(d.utm_content)], ['bh_referrer', clip(d.referrer, 500)],
+    ['website', clip(d.website, 300)], ['jobtitle', clip(d.role, 120)],
+    ['message', [note, details].filter(Boolean).join('\n\n---\n')],
   ].filter(([, v]) => v).map(([name, value]) => ({ objectTypeId: '0-1', name, value }));
 
   const portal = env.HUBSPOT_PORTAL_ID || '247722762';
@@ -54,11 +59,8 @@ export async function onRequestPost({ request, env }) {
     if (!res.ok) {
       const detail = await res.text();
       console.error('HubSpot error', res.status, detail);
-      // Unknown custom properties are the most common cause; retry with standard fields only.
-      const std = fields.filter(f => ['firstname', 'lastname', 'email', 'company', 'website', 'jobtitle'].includes(f.name));
-      std.push({ objectTypeId: '0-1', name: 'message', value: [situation, clip(d.bh_form_location, 60), clip(d.message, 3000)].filter(Boolean).join(' | ') });
       const retry = await fetch(`https://api.hsforms.com/submissions/v3/integration/submit/${portal}/${formGuid}`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fields: std, context }),
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fields }),
       });
       if (!retry.ok) return json({ error: 'Your message didn’t go through.' }, 502);
     }

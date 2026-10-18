@@ -95,7 +95,7 @@ let formCount = 0;
 export function formA({ title = "Tell us what's going on", submit = 'Book an intro call', location, preselect = '', service = '', audience = '' }) {
   const id = `f${++formCount}`;
   const opts = SITUATIONS.map(o => `<option${o === preselect ? ' selected' : ''}>${esc(o)}</option>`).join('');
-  return `<form class="form-card bh-form" data-form="A" novalidate action="/api/lead" method="post" aria-labelledby="${id}-t">
+  return `<form class="form-card bh-form" data-hs-do-not-collect="true" data-form="A" novalidate action="/api/lead" method="post" aria-labelledby="${id}-t">
   <p class="form-title" id="${id}-t">${esc(title)}</p>
   <div class="field"><label for="${id}-name">Name</label><input id="${id}-name" name="name" autocomplete="name" required><span class="err">${esc(G.errors.name)}</span></div>
   <div class="field"><label for="${id}-email">Work email</label><input id="${id}-email" name="email" type="email" autocomplete="email" required><span class="err">${esc(G.errors.email)}</span></div>
@@ -110,7 +110,7 @@ export function formA({ title = "Tell us what's going on", submit = 'Book an int
 export function formB() {
   const id = 'fb';
   const opts = SITUATIONS.map(o => `<option>${esc(o)}</option>`).join('');
-  return `<form class="form-card bh-form" data-form="B" novalidate action="/api/lead" method="post" aria-label="Contact form">
+  return `<form class="form-card bh-form" data-hs-do-not-collect="true" data-form="B" novalidate action="/api/lead" method="post" aria-label="Contact form">
   <div class="two-col"><div class="field"><label for="${id}-name">Name</label><input id="${id}-name" name="name" autocomplete="name" required><span class="err">${esc(G.errors.name)}</span></div>
   <div class="field"><label for="${id}-email">Work email</label><input id="${id}-email" name="email" type="email" autocomplete="email" required><span class="err">${esc(G.errors.email)}</span></div></div>
   <div class="two-col"><div class="field"><label for="${id}-company">Company</label><input id="${id}-company" name="company" autocomplete="organization" required><span class="err">${esc(G.errors.company)}</span></div>
