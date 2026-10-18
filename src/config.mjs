@@ -16,7 +16,7 @@ export const SITE = {
   turnstileSiteKey: env.TURNSTILE_SITE_KEY || '0x4AAAAAAFaixtRZ_SnM5mpV',
   ga4Id: env.GA4_ID || 'G-TPKMTV2ZB0',
   hubspotPortalId: env.HUBSPOT_PORTAL_ID || '247722762',
-  meetingsUrl: env.HUBSPOT_MEETINGS_URL || '',
+  meetingsUrl: env.HUBSPOT_MEETINGS_URL || 'https://meetings-na2.hubspot.com/max-cowan',
 };
 
 export const SITUATIONS = [

@@ -393,3 +393,5 @@ a.card:hover{border-color:var(--brand)}
   body{padding-bottom:0}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+.meetings-iframe-container{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;min-height:660px}
+.meetings-iframe-container iframe{display:block;width:100%;min-height:660px;border:0}
