@@ -1629,7 +1629,7 @@ Paid search, paid social, social media management, website design or development
 
 **Pricing**
 
-Audits start at $3,000 and vary with complexity and data costs. Ongoing retainers start at $5,000 a month and are scoped to complexity and deliverables. Final pricing is set after an intro call.
+Audits start at $3,000 and vary with complexity and data costs. Ongoing retainers start at $5,000 a month for brands and $2,000 a month for agency advisory and white-label work, scoped to complexity and deliverables. Final pricing is set after an intro call.
 
 **Preferred sources**
 
