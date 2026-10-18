@@ -53,18 +53,22 @@ export async function onRequestPost({ request, env }) {
   if (portal && formGuid) {
     const context = { pageUri: clip(d.pageUri, 500), pageName: clip(d.pageName, 200), ipAddress: request.headers.get('CF-Connecting-IP') || undefined };
     if (clip(d.hutk, 100)) context.hutk = clip(d.hutk, 100);
-    const res = await fetch(`https://api.hsforms.com/submissions/v3/integration/submit/${portal}/${formGuid}`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fields, context }),
-    });
-    if (!res.ok) {
-      const detail = await res.text();
-      console.error('HubSpot error', res.status, detail);
-      const retry = await fetch(`https://api.hsforms.com/submissions/v3/integration/submit/${portal}/${formGuid}`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fields }),
-      });
-      if (!retry.ok) return json({ error: 'Your message didn’t go through.' }, 502);
+    // Try the global endpoint first, then the account's own data-centre endpoint (this account is on na2).
+    const hosts = ['api.hsforms.com', 'api-na2.hsforms.com'];
+    let last = '';
+    for (const body of [{ fields, context }, { fields }]) {
+      for (const host of hosts) {
+        try {
+          const res = await fetch(`https://${host}/submissions/v3/integration/submit/${portal}/${formGuid}`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
+          });
+          if (res.ok) { console.log('HubSpot ok', host, email); return json({ ok: true, via: host }); }
+          last = `${host} ${res.status} ${(await res.text()).slice(0, 300)}`;
+        } catch (e) { last = `${host} ${e.message}`; }
+        console.error('HubSpot error', last);
+      }
     }
-    return json({ ok: true });
+    return json({ error: `Your message didn’t go through (${last.slice(0, 160)}).` }, 502);
   }
 
   if (env.LEAD_FALLBACK_URL) {
