@@ -432,7 +432,7 @@ export function contact(p) {
 }
 export function thanks(p) {
   const c2 = sec(p, 'C2');
-  const sched = SITE.meetingsUrl ? `<div class="meetings-iframe-container" data-src="${esc(SITE.meetingsUrl)}?embed=true"></div><script src="https://static.hsappstatic.net/MeetingsEmbed/ex/MeetingsEmbedCode.js" defer></script>` : `<div class="card" style="min-height:260px;justify-content:center;align-items:flex-start"><p class="label">${esc(field(c2, 'Scheduler label'))}</p><p>Max will email you a few times that work. Or write to <a href="mailto:${SITE.email}">${SITE.email}</a>.</p></div>`;
+  const sched = SITE.meetingsUrl ? `<div class="meetings-iframe-container" data-src="${esc(SITE.meetingsUrl)}?embed=true"></div><script src="https://static.hsappstatic.net/MeetingsEmbed/ex/MeetingsEmbedCode.js" defer></script>` : `<div class="card" style="min-height:260px;justify-content:center;align-items:flex-start"><p>Max will email you a few times that work. Or write to <a href="mailto:${SITE.email}">${SITE.email}</a>.</p></div>`;
   const body = `
 <section class="hero">
 <div class="wrap split even">
