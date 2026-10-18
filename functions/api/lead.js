@@ -10,6 +10,9 @@
 const json = (body, status = 200) => new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
 const clip = (v, n = 500) => (typeof v === 'string' ? v.trim().slice(0, n) : '');
 
+// The one HubSpot form both site forms submit into (env vars override).
+const HUBSPOT_FORM_DEFAULT = '';
+
 export async function onRequestPost({ request, env }) {
   let d;
   try { d = await request.json(); } catch { return json({ error: 'Please try again.' }, 400); }
@@ -40,11 +43,12 @@ export async function onRequestPost({ request, env }) {
     ['utm_term', clip(d.utm_term)], ['utm_content', clip(d.utm_content)], ['bh_referrer', clip(d.referrer, 500)],
   ].filter(([, v]) => v).map(([name, value]) => ({ objectTypeId: '0-1', name, value }));
 
-  const formGuid = d.form === 'B' ? env.HUBSPOT_FORM_B : env.HUBSPOT_FORM_A;
-  if (env.HUBSPOT_PORTAL_ID && formGuid) {
+  const portal = env.HUBSPOT_PORTAL_ID || '247722762';
+  const formGuid = (d.form === 'B' && env.HUBSPOT_FORM_B) || env.HUBSPOT_FORM_A || HUBSPOT_FORM_DEFAULT;
+  if (portal && formGuid) {
     const context = { pageUri: clip(d.pageUri, 500), pageName: clip(d.pageName, 200), ipAddress: request.headers.get('CF-Connecting-IP') || undefined };
     if (clip(d.hutk, 100)) context.hutk = clip(d.hutk, 100);
-    const res = await fetch(`https://api.hsforms.com/submissions/v3/integration/submit/${env.HUBSPOT_PORTAL_ID}/${formGuid}`, {
+    const res = await fetch(`https://api.hsforms.com/submissions/v3/integration/submit/${portal}/${formGuid}`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fields, context }),
     });
     if (!res.ok) {
@@ -53,7 +57,7 @@ export async function onRequestPost({ request, env }) {
       // Unknown custom properties are the most common cause; retry with standard fields only.
       const std = fields.filter(f => ['firstname', 'lastname', 'email', 'company', 'website', 'jobtitle'].includes(f.name));
       std.push({ objectTypeId: '0-1', name: 'message', value: [situation, clip(d.bh_form_location, 60), clip(d.message, 3000)].filter(Boolean).join(' | ') });
-      const retry = await fetch(`https://api.hsforms.com/submissions/v3/integration/submit/${env.HUBSPOT_PORTAL_ID}/${formGuid}`, {
+      const retry = await fetch(`https://api.hsforms.com/submissions/v3/integration/submit/${portal}/${formGuid}`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fields: std, context }),
       });
       if (!retry.ok) return json({ error: 'Your message didn’t go through.' }, 502);

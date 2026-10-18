@@ -15,7 +15,7 @@ export const SITE = {
   // Public keys and IDs (safe to ship to the browser)
   turnstileSiteKey: env.TURNSTILE_SITE_KEY || '0x4AAAAAAFaixtRZ_SnM5mpV',
   ga4Id: env.GA4_ID || '',
-  hubspotPortalId: env.HUBSPOT_PORTAL_ID || '',
+  hubspotPortalId: env.HUBSPOT_PORTAL_ID || '247722762',
   meetingsUrl: env.HUBSPOT_MEETINGS_URL || '',
 };
 
