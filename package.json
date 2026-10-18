@@ -1,0 +1,11 @@
+{
+  "name": "bluehousedigital-website",
+  "private": true,
+  "type": "module",
+  "description": "bluehousedigital.com: static site built from the approved copy doc, hosted on Cloudflare Pages.",
+  "scripts": {
+    "build": "node build.mjs",
+    "serve": "node build.mjs && npx --yes serve dist -l 4321"
+  },
+  "engines": { "node": ">=20" }
+}
